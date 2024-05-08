@@ -1,0 +1,23 @@
+database postgre
+
+*syntac sql jangan lupa ;. nanti kalo ga pake ; ga akan jalan dan syntax yg diketik berikut nya mungkin error
+jadi harus diketik ulang
+*ada banyak cara, seperti menggunakan sql syntax atau cli
+
+#create database
+create database user owner nama_user;
+
+#create user
+createuser -U super_user -s -P nama_user_baru
+createuser -U postgres -s -P admin -- ketik saat sedang logout
+
+#koneksi ke db / select database
+psql -U nama_user -d nama_db   	--nanti suru masukin password user
+psql -U postgres    		--kalo user sama db nya sama. db ga diketik juga gpp
+
+#
+\du  --melihat user terdaftar 
+\q   --keluar dari database yang di select /user(logout)
+\l   --melihat list database
+\dt  --database table
+\c   --pindah koneksi database(mungkin jika user sama)

@@ -1,0 +1,79 @@
+docker syntax dan linux command
+
+docker images
+
+##run image, jadi container baru
+docker run nama_imagenya:tag_version
+docker run nama_imagenya:tag_version nama_program
+docker run -ti nama_image:tag_version nama_program	##ti>terminal interaktif agar bisa mengetikan sesuatu saat running
+docker run -d -ti nama_image:tag_version nama_program	##running container tanpa masuk kedalamnya
+
+## network(--net) envirotment(-e) port(-p) nama_conatiner(--name)
+envirotment jika digunakan akan menimpa/mengganti variable di file .env
+
+##host yang tadinya localhost diganti menjadi pglocal, karna dicontainer tidak mengenali localhos
+(nama container, contoh ini adalah container postgre pglocal). 
+##port luar bebas, port dalam wajib ikutin port yg berjalan dilocal. contoh ini dari file .env. luar dalam boleh sama
+docker run --net nama_network -e key_envirotment=value_envirotment -p port_luar_container:port_dalam_cont nama_image:tag
+docker run --net coffeeshop -e DB_HOST=pglocal -p 8082:8081 -d zikrigusli/coffeeshopbe:3
+docker run --name pglocal --net coffeeshop -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:16.2-alpine
+
+##masuk kedalam container yng berjalan, untuk debugging atau operasi didalam cont secara langsung
+docker exec -it nama_container bash
+docker exec -it basic-postgres /bin/sh
+
+##jika ingin merubah container yang running
+docker attach nama_cont 				##akan masuk ke container
+
+##container harus ada program yang berjalan, jika tidak maka akan berhenti
+docker run -ti ubuntu:14.04 bash 			##menjalankan image dan program bash(seperti terminal/cmd). container run
+cat /etc.lsb-release 					##melihat versi image
+docker run -ti ubuntu:14.04 echo "helloworld" 		##contatiner running lalu stop. karena program seleai hanya menampilkan text
+docker run -ti ubuntu:14.04 bash -c "sleep 3; hworld"	##container run 3 detik lalu stop
+##jika container ingin terus berjalan maka harus ada program didalamnya yang berjalan trus
+
+docker ps 		atau docker container ls	##melihat list container yang sedang running
+docker ps -a 		atau docker container ls -a	##melihat list container yang running dan stop
+ctrl + d						##untuk menghentikan container. jadi container akan stop
+ctrl + p, ctrl + q 					##untuk keluar dari container tanpa memberhentikannya
+
+##stop container. 
+docker stop nama_container
+
+##remove container. jika masih berjalan harus di stop dulu
+docker rm nama_container/id_container
+##remove image
+docker rmi nama_image
+
+##melihat log container
+docker logs -f id_container
+
+##inspect container, melihat seperti network, port, dll
+
+
+####container networking. container akan bisa saling terhubung jika didalam network yang sama
+docker network create nama_network			##membuat network
+docker network ls 					##melihat list network
+
+####container volume
+
+
+####docker registry. (ada yang lain seperti aws registry dll)
+
+
+####Dockerfile. text document yang berisi perintah yang dapat dipanggil di cmd untuk membuat image
+
+####docker compose. menjalankan container menggunakan file YAML. 
+dapat membuat dan memulai lebih dari satu container secara bersamaan
+
+<!-- create container all service -->
+docker compose up -d nama_servise
+
+<!-- create container 1 service -->
+docker compose up -d nama_servise
+
+<!-- delete container all service -->
+docker compose down
+
+<!-- delete container 1 service -->
+docker compose down nama_service
